@@ -7,7 +7,7 @@ def calcular_descuento(subtotal_bruto: float, tipo_cliente: str) -> float:
     PORCENTAJE_REG_BAJO: float = 0.03
 
     if tipo_cliente == "VIP":
-        if subtotal_bruto > 500.0:
+        if subtotal_bruto  500.0:
             return subtotal_bruto * PORCENTAJE_VIP_ALTO
         else:
             return subtotal_bruto * PORCENTAJE_VIP_BAJO
@@ -26,7 +26,7 @@ def procesar_factura(subtotal_bruto: float, tipo_cliente: str) -> dict:
 
     monto_descuento: float = calcular_descuento(subtotal_bruto, tipo_cliente)
     subtotal_con_descuento: float = subtotal_bruto - monto_descuento
-    monto_igv: float = subtotal_bruto * TASA_IGV
+    monto_igv: float = subtotal_con_descuento * TASA_IGV
     total_a_pagar: float = subtotal_con_descuento + monto_igv
 
     return {
