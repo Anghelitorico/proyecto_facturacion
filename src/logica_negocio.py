@@ -26,7 +26,7 @@ def procesar_factura(subtotal_bruto: float, tipo_cliente: str) -> dict:
 
     monto_descuento: float = calcular_descuento(subtotal_bruto, tipo_cliente)
     subtotal_con_descuento: float = subtotal_bruto - monto_descuento
-    monto_igv: float = subtotal_con_descuento * TASA_IGV
+    monto_igv: float = subtotal_bruto * TASA_IGV
     total_a_pagar: float = subtotal_con_descuento + monto_igv
 
     return {
