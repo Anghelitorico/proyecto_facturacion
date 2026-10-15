@@ -1,47 +1,24 @@
-# ==============================================================================
-# PIPELINE DE INTEGRACIÓN CONTINUA - COMERCIAL CHICLAYO
-# ==============================================================================
-
 name: Pipeline CI Comercial Chiclayo
-
-# 1. EVENTOS DISPARADORES (Triggers)
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-# 2. TRABAJOS DE EJECUCIÓN (Jobs)
+    branches: [ "main" ]
 jobs:
   auditoria-y-pruebas:
-    name: Ejecucion de Flake8 y Pytest en Ubuntu
     runs-on: ubuntu-latest
-
     steps:
-      # Paso A: Descargar el código del repositorio hacia la máquina virtual
-      - name: Obtener codigo fuente
+      - name: 1. Obtener codigo fuente
         uses: actions/checkout@v4
-
-      # Paso B: Configurar el entorno con la versión oficial de Python
-      - name: Configurar Python 3.11
+      - name: 2. Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # Paso C: Instalar las dependencias de calidad
-      - name: Instalar herramientas QA
+      - name: 3. Instalar herramientas QA
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-
-      # Paso D: Auditar el estilo del código fuente
-      - name: Auditar codigo fuente con Flake8
+      - name: 4. Auditar codigo completo con Flake8
         run: |
-          flake8 src/ --max-line-length=100
-
-      # Paso E: Ejecutar las pruebas unitarias de facturación
-      - name: Ejecutar pruebas de negocio con Pytest
+          flake8 src/ tests/ --max-line-length=100
+      - name: 5. Ejecutar pruebas con Pytest
         run: |
           pytest tests/test_facturacion_pytest.py
