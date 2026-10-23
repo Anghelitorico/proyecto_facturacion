@@ -1,4 +1,3 @@
-
 import datetime
 import sys
 
@@ -10,10 +9,9 @@ def ejecutar_auditoria():
 
     fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Transacción contable de control (Monto base: 1000.0, Cliente: VIP)
+    # Transacción contable de control: S/ 1000, cliente VIP.
     factura_control = procesar_factura(1000.0, "VIP")
 
-    # Verificación de consistencia contable
     if factura_control["total_pagar"] <= 0:
         print("[ERROR FATAL]: Discrepancia contable detectada.")
         sys.exit(1)
