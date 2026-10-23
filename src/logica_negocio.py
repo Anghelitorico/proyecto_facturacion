@@ -1,41 +1,13 @@
-import os
-import sys
-import time
-
-CARPETA_REPORTES = "./reportes_diarios"
-
-
-def limpiar_reportes_antiguos():
-    print("--- INICIANDO MANTENIMIENTO AUTOMATIZADO ---")
-
-    if not os.path.exists(CARPETA_REPORTES):
-        print("[ERROR CRÍTICO]: No existe la carpeta 'reportes_diarios'.")
-        print(
-            "Por favor, créala y coloca un archivo dentro "
-            "antes de ejecutar este script."
-        )
-        sys.exit(1)
-
-    tiempo_actual = time.time()
-    archivos_eliminados = 0
-
-    for archivo in os.listdir(CARPETA_REPORTES):
-        ruta_completa = os.path.join(CARPETA_REPORTES, archivo)
-
-        if os.path.isfile(ruta_completa) and archivo.endswith(".csv"):
-            fecha_modificacion = os.path.getmtime(ruta_completa)
-
-            if tiempo_actual - fecha_modificacion > 5:
-                os.remove(ruta_completa)
-                print(f"[CONSOLA] Archivo obsoleto eliminado: {archivo}")
-                archivos_eliminados += 1
-
-    print(
-        "--- MANTENIMIENTO FINALIZADO. "
-        f"Se eliminaron {archivos_eliminados} archivos. ---"
-    )
-    sys.exit(0)
+def calcular_descuento(monto, tipo_cliente):
+    if tipo_cliente == "VIP" and monto < 500:
+        return monto * 0.10
+    if tipo_cliente == "REGULAR" and monto > 500:
+        return monto * 0.08
+    return 0.0
 
 
-if __name__ == "__main__":
-    limpiar_reportes_antiguos()
+def validar_numero_positivo(numero):
+    try:
+        return float(numero) > 0
+    except (ValueError, TypeError):
+        return False
