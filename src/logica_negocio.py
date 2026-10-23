@@ -1,44 +1,41 @@
-def calcular_descuento(subtotal_bruto: float, tipo_cliente: str) -> float:
-    """Calcula el monto de descuento según el tipo de cliente y el subtotal."""
-    tipo_cliente = tipo_cliente.upper().strip()
-    PORCENTAJE_VIP_ALTO: float = 0.15
-    PORCENTAJE_VIP_BAJO: float = 0.10
-    PORCENTAJE_REG_ALTO: float = 0.08
-    PORCENTAJE_REG_BAJO: float = 0.03
+import os
+import sys
+import time
 
-    if tipo_cliente == "VIP":
-        if subtotal_bruto  > 500.0:
-            return subtotal_bruto * PORCENTAJE_VIP_ALTO
-        else:
-            return subtotal_bruto * PORCENTAJE_VIP_BAJO
-    elif tipo_cliente == "REGULAR":
-        if subtotal_bruto > 500.0:
-            return subtotal_bruto * PORCENTAJE_REG_ALTO
-        else:
-            return subtotal_bruto * PORCENTAJE_REG_BAJO
-    else:
-        return 0.0
+CARPETA_REPORTES = "./reportes_diarios"
 
 
-def procesar_factura(subtotal_bruto: float, tipo_cliente: str) -> dict:
-    """Integra los cálculos de descuento, IGV y total a pagar."""
-    TASA_IGV: float = 0.18
+def limpiar_reportes_antiguos():
+    print("--- INICIANDO MANTENIMIENTO AUTOMATIZADO ---")
 
-    monto_descuento: float = calcular_descuento(subtotal_bruto, tipo_cliente)
-    subtotal_con_descuento: float = subtotal_bruto - monto_descuento
-    monto_igv: float = subtotal_con_descuento * TASA_IGV
-    total_a_pagar: float = subtotal_con_descuento + monto_igv
+    if not os.path.exists(CARPETA_REPORTES):
+        print("[ERROR CRÍTICO]: No existe la carpeta 'reportes_diarios'.")
+        print(
+            "Por favor, créala y coloca un archivo dentro "
+            "antes de ejecutar este script."
+        )
+        sys.exit(1)
 
-    return {
-        "subtotal_bruto": round(subtotal_bruto, 2),
-        "descuento": round(monto_descuento, 2),
-        "subtotal_neto": round(subtotal_con_descuento, 2),
-        "igv": round(monto_igv, 2),
-        "total_pagar": round(total_a_pagar, 2)
-    }
+    tiempo_actual = time.time()
+    archivos_eliminados = 0
+
+    for archivo in os.listdir(CARPETA_REPORTES):
+        ruta_completa = os.path.join(CARPETA_REPORTES, archivo)
+
+        if os.path.isfile(ruta_completa) and archivo.endswith(".csv"):
+            fecha_modificacion = os.path.getmtime(ruta_completa)
+
+            if tiempo_actual - fecha_modificacion > 5:
+                os.remove(ruta_completa)
+                print(f"[CONSOLA] Archivo obsoleto eliminado: {archivo}")
+                archivos_eliminados += 1
+
+    print(
+        "--- MANTENIMIENTO FINALIZADO. "
+        f"Se eliminaron {archivos_eliminados} archivos. ---"
+    )
+    sys.exit(0)
 
 
-def validar_numero_positivo(entrada_texto: str) -> bool:
-    """Valida si el texto ingresado es un número decimal positivo válido."""
-    texto_limpio = entrada_texto.strip().replace('.', '', 1)
-    return texto_limpio.isdigit() and float(entrada_texto) > 0
+if __name__ == "__main__":
+    limpiar_reportes_antiguos()
