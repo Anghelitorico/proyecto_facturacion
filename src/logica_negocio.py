@@ -25,6 +25,7 @@ def procesar_factura(monto, tipo_cliente):
 
     return {
         "monto_original": monto,
+        "subtotal_bruto": monto,
         "tipo_cliente": tipo_cliente,
         "descuento": descuento,
         "total": total,
