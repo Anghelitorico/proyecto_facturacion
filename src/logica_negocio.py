@@ -28,4 +28,5 @@ def procesar_factura(monto, tipo_cliente):
         "tipo_cliente": tipo_cliente,
         "descuento": descuento,
         "total": total,
+        "total_pagar": total,
     }
